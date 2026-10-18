@@ -48,9 +48,17 @@ fn setup(
 }
 
 fn ui_example_system(mut contexts: EguiContexts) -> Result {
-    egui::SidePanel::left("left_panel")
+    let ctx = contexts.ctx_mut()?;
+    let mut viewport_ui = egui::Ui::new(
+        ctx.clone(),
+        "viewport".into(),
+        egui::UiBuilder::new()
+            .layer_id(egui::LayerId::background())
+            .max_rect(ctx.viewport_rect()),
+    );
+    egui::Panel::left("left_panel")
         .resizable(true)
-        .show(contexts.ctx_mut()?, |ui| {
+        .show(&mut viewport_ui, |ui| {
             ui.label("Left resizeable panel");
         });
 

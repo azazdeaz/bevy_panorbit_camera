@@ -5,7 +5,7 @@ use bevy_egui::EguiContext;
 /// in order to determine whether PanOrbitCamera should react to input events.
 ///
 /// The reason the previous frame's value is saved is because when you click inside an
-/// egui window, Context::wants_pointer_input() still returns false once before returning
+/// egui window, Context::egui_wants_pointer_input() still returns false once before returning
 /// true. If the camera stops taking input only when it returns false, there's one frame
 /// where both egui and the camera are using the input events, which is not desirable.
 ///
@@ -40,9 +40,9 @@ pub fn check_egui_wants_focus(
     for mut context in contexts.iter_mut() {
         let context = context.get_mut();
         let mut context_wants_focus =
-            context.wants_pointer_input() || context.wants_keyboard_input();
+            context.egui_wants_pointer_input() || context.egui_wants_keyboard_input();
         if include_hover.0 {
-            context_wants_focus |= context.is_pointer_over_area();
+            context_wants_focus |= context.is_pointer_over_egui();
         }
         new_wants_focus |= context_wants_focus;
     }
